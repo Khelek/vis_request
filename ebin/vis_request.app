@@ -1,0 +1,10 @@
+{application,vis_request,
+             [{description,"Visualization requests for ip."},
+              {vsn,"1"},
+              {modules,[toppage_handler,vis_request,vis_request_app,
+                        vis_request_sup,viz_request,viz_request_app,
+                        viz_request_sup,ws_handler]},
+              {registered,[]},
+              {applications,[kernel,stdlib,cowboy,egeoip,gproc]},
+              {mod,{vis_request_app,[]}},
+              {env,[]}]}.

@@ -1,0 +1,17 @@
+%% Feel free to use, reuse and abuse the code in this file.
+
+{application, vis_request, [
+	{description, "Visualization requests for ip."},
+	{vsn, "1"},
+	{modules, []},
+	{registered, []},
+	{applications, [
+		kernel,
+		stdlib,
+		cowboy,
+		egeoip,
+		gproc
+	]},
+	{mod, {vis_request_app, []}},
+	{env, []}
+]}.
