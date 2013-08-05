@@ -2,17 +2,17 @@
 
 -module(vis_request).
 
+-define(WSBroadcast,"wsbroadcast").
+
 %% API.
 -export([start/0, push_ip/1, bench/1]).
-
--define(WSBroadcast,"wsbroadcast").
 
 start() ->
 	ok = application:start(crypto),
 	ok = application:start(ranch),
 	ok = application:start(cowboy),
 	ok = application:start(gproc),
-	ok = application:start(egeoip),    
+	ok = egeoip:start(geodbname()),    
     ok = application:start(lager),
    	ok = application:start(safetyvalve),
     ok = application:start(vis_request).
@@ -25,8 +25,6 @@ push_ip(Ip) ->
         {error, queue_full} -> {error, queue_full};
         {error, overload} -> {error, overload}
     end.
-
-%% bench API
 
 bench(Count) ->
     SampleIPs = ["63.224.214.117",
@@ -44,7 +42,7 @@ bench(Count) ->
     EndParse = now(),
     {end_benchmark, unixtime(EndParse) - unixtime(StartParse)}.
 
-%%end bench API
+%% useful utilite function
 
 benchcall(Fun, 1) ->
     Fun();
@@ -55,3 +53,6 @@ benchcall(Fun, Times) ->
 unixtime({MegaSecs, Secs, MicroSecs}) ->
     (1.0e+6 * MegaSecs) + Secs + (1.0e-6 * MicroSecs).
 
+geodbname() ->
+    {ok, Cwd} = file:get_cwd(),
+    Filename = filename:join([Cwd, "priv", "GeoLiteCity.dat"]).
