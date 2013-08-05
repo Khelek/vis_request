@@ -14,8 +14,8 @@ start() ->
 	ok = application:start(gproc),
 	ok = application:start(egeoip),    
     ok = application:start(lager),
-	ok = application:start(vis_request),
-   	ok = application:start(safetyvalve).
+   	ok = application:start(safetyvalve),
+    ok = application:start(vis_request).
 
 push_ip(Ip) -> 
     case sv:run(ws_q, fun() ->

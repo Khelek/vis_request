@@ -10,7 +10,9 @@
 		stdlib,
 		cowboy,
 		egeoip,
-		gproc
+		gproc,
+		lager,
+		safetyvalve
 	]},
 	{mod, {vis_request_app, []}},
 	{env, []}
