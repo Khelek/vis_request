@@ -15,7 +15,7 @@ init({tcp, http}, _Req, _Opts) ->
 websocket_init(_TransportName, Req, _Opts) ->	
 	lager:notice("websocket init"),
 	lager:info("websocket init", [Req]),
-	self()!<<"Hello!">>,
+	self()!{self(), ?WSBroadcast, <<"Hello!">>},
 	gproc:reg({p,l, main_room}),
 	{ok, Req, undefined_state}.
 
@@ -24,9 +24,7 @@ websocket_handle(_Data, Req, State) ->
 	lager:info("websocket handle", [Req]),
 	{ok, Req, State}.
 
-websocket_info({Pid, ?WSBroadcast, Msg}, Req, State) ->	
-	lager:notice("websocket info"),
-	lager:info("websocket info", [Req]),
+websocket_info({Pid, ?WSBroadcast, Msg}, Req, State) ->
 	{reply, {text, Msg}, Req, State};
 websocket_info(_Info, Req, State) ->	
 	lager:notice("websocket info 2"),
