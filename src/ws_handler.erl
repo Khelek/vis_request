@@ -12,23 +12,28 @@
 init({tcp, http}, _Req, _Opts) ->
 	{upgrade, protocol, cowboy_websocket}.
 
-websocket_init(_TransportName, Req, _Opts) ->
-	erlang:display("-------------------------webInit"),
-	erlang:start_timer(1000, self(), <<"Hello!">>),
+websocket_init(_TransportName, Req, _Opts) ->	
+	lager:notice("websocket init"),
+	lager:info("websocket init", [Req]),
+	self()!<<"Hello!">>,
 	gproc:reg({p,l, main_room}),
 	{ok, Req, undefined_state}.
 
-websocket_handle(_Data, Req, State) ->
-	erlang:display("-------------------------webHandle2"),
+websocket_handle(_Data, Req, State) ->	
+	lager:notice("websocket handle"),
+	lager:info("websocket handle", [Req]),
 	{ok, Req, State}.
 
-websocket_info({Pid, ?WSBroadcast, Msg}, Req, State) ->
-	%erlang:display("-------------------------webInfo1"),
+websocket_info({Pid, ?WSBroadcast, Msg}, Req, State) ->	
+	lager:notice("websocket info"),
+	lager:info("websocket info", [Req]),
 	{reply, {text, Msg}, Req, State};
-websocket_info(_Info, Req, State) ->
-	erlang:display("-------------------------webInfo2"),
+websocket_info(_Info, Req, State) ->	
+	lager:notice("websocket info 2"),
+	lager:info("websocket info 2", [Req]),
 	{ok, Req, State}.
 
-websocket_terminate(_Reason, _Req, _State) ->
-	erlang:display("-------------------------webTerminate"),
+websocket_terminate(_Reason, Req, _State) ->	
+	lager:notice("websocket terminate"),
+	lager:info("websocket terminate", [Req]),
 	ok.

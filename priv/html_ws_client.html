@@ -6,6 +6,7 @@
     <script type="text/javascript">
       
       var websocket;
+      var count = 0;
       $(document).ready(init);
       
       function init() {
@@ -64,7 +65,8 @@
       };  
 
       function onMessage(evt) { 
-          //showScreen('<span style="color: blue;">RESPONSE: ' + evt.data+ '</span>'); 
+          count++;
+          showScreen('<span style="color: blue;">RESPONSE: ' + evt.data+ ', COUNT: ' + count + '</span>'); 
       };  
 
       function showScreen(txt) { 
