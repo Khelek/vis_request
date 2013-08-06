@@ -24,8 +24,7 @@ start(_Type, _Args) ->
 		]}			
 	]),
 	{ok, _} = cowboy:start_http(http, 100, [{port, 8080}],
-		[{env, [{dispatch, Dispatch}]}]),
-	vis_request_sup:start_link().
+		[{env, [{dispatch, Dispatch}]}]).
 
 get_coords(Info) ->	
 	{ok, {_,_,_,_,_,_,_, Lat_float, Long_float,_,_}} = Info,
