@@ -2,30 +2,67 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Websocket client</title>
+    <style>
+      body {
+        font-family: Monospace;
+        font-weight: bold;
+        background-color: #ccccff;
+        margin: 0px;
+        overflow: hidden;
+      }
+      #info, #status, #output {
+        position: absolute;
+        top: 10px; width: 100%;
+        padding: 5px;
+        z-index:100;
+        color: #ffffff;
+        text-align: center;
+      }
+      #status {
+        top: 20px;
+      }
+      #output {
+        top: 30px;
+      }
+    </style>
     <script src="/static/jquery.min.js"></script>
+
+    <script src="/static/js/Three.js"></script>
+    <script src="/static/js/Detector.js"></script>
+    <script src="/static/js/Stats.js"></script>
+    <script src="/static/js/RequestAnimationFrame.js"></script>
+    <script src="/static/js/Tween.js"></script>
+    <script src="/static/js/OrbitControls.js"/></script>
+
+    <script src="/static/js/THREEx.FullScreen.js"></script>
+    <script src="/static/js/THREEx.WindowResize.js"></script>
+    <script src="/static/js/shaders/CopyShader.js"></script>
+    <script src="/static/js/shaders/FilmShader.js"></script>
+
+    <script src="/static/js/postprocessing/EffectComposer.js"></script>
+    <script src="/static/js/postprocessing/ShaderPass.js"></script>
+    <script src="/static/js/postprocessing/MaskPass.js"></script>
+    <script src="/static/js/postprocessing/RenderPass.js"></script>
+    <script src="/static/js/postprocessing/FilmPass.js"></script>
+    <script src="/static/js/main.js"></script>
     <script type="text/javascript">
       
       var websocket;
-      var count = 0;
       $(document).ready(init);
       
       function init() {
+          webglGlobeInit();
           if(!("WebSocket" in window)){  
               $('#status').append('<p><span style="color: red;">websockets are not supported </span></p>');
-              $("#navigation").hide();  
           } else {
               $('#status').append('<p><span style="color: green;">websockets are supported </span></p>');
               connect();
           };
-              $("#connected").hide(); 	
-              $("#content").hide(); 	
       };
 
       function connect()
       {
-          wsHost = $("#server").val()
-          websocket = new WebSocket(wsHost);
-          showScreen('<b>Connecting to: ' +  wsHost + '</b>'); 
+          websocket = new WebSocket("ws://localhost:8080/websocket");
           websocket.onopen = function(evt) { onOpen(evt) }; 
           websocket.onclose = function(evt) { onClose(evt) }; 
           websocket.onmessage = function(evt) { onMessage(evt) }; 
@@ -36,28 +73,8 @@
           websocket.close();
       }; 
 
-      function toggle_connection(){
-          if(websocket.readyState == websocket.OPEN){
-              disconnect();
-          } else {
-              connect();
-          };
-      };
-
-      function sendTxt() {
-          if(websocket.readyState == websocket.OPEN){
-              txt = $("#send_txt").val();
-              websocket.send(txt);
-              showScreen('sending: ' + txt); 
-          } else {
-               showScreen('websocket is not connected'); 
-          };
-      };
-
       function onOpen(evt) { 
           showScreen('<span style="color: green;">CONNECTED </span>'); 
-          $("#connected").fadeIn('slow');
-          $("#content").fadeIn('slow');
       };  
 
       function onClose(evt) { 
@@ -65,46 +82,20 @@
       };  
 
       function onMessage(evt) { 
-          count++;
-          showScreen('<span style="color: blue;">RESPONSE: ' + evt.data+ ', COUNT: ' + count + '</span>'); 
+        var coords = JSON.parse(evt.data);
+        addSprite(coords[0], coords[1]);
+          //showScreen('<span style="color: blue;">RESPONSE: ' + evt.data+ ', COUNT: ' + count + '</span>'); 
       };  
 
       function showScreen(txt) { 
           $('#output').prepend('<p>' + txt + '</p>');
       };
-
-      function clearScreen() 
-      { 
-          $('#output').html("");
-      };
     </script>
   </head>
 
   <body>
-    <div id="header">
-      <h1>Websocket client</h1>
-      <div id="status"></div>
-    </div>
-
-
-    <div id="navigation">
-
-      <p id="connecting">
-	<input type='text' id="server" value="ws://localhost:8080/websocket"></input>
-	<button type="button" onclick="toggle_connection()">connection</button>
-      </p>
-      <div id="connected">				
-	<p>
-	  <input type='text' id="send_txt" value=></input>
-	  <button type="button" onclick="sendTxt();">send</button>
-	</p>
-      </div>
-
-      <div id="content">						
-	<button id="clear" onclick="clearScreen()" >Clear text</button>
-	<div id="output"></div>
-      </div>
-
-    </div>
+    <div id="status"></div>   <br> 
+    <div id="info">To turn on/off fullscreen mode press "f"</div>   <br>     
+    <div id="output"></div>
   </body>
 </html> 
