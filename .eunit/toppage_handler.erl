@@ -16,7 +16,6 @@ handle(Req, State) ->
 		Html, Req),
 	{ok, Req2, State}.
 
-
 terminate(_Reason, _Req, _State) ->
 	ok.
 

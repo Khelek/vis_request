@@ -26,18 +26,16 @@ start(_Type, _Args) ->
 	{ok, _} = cowboy:start_http(http, 100, [{port, 8080}],
 		[{env, [{dispatch, Dispatch}]}]).
 
-stop(_State) ->
-	ok.
-
-vis_request_broadcast(Ip) ->
-	Info = egeoip:lookup(Ip),
-	Coords = get_coords(Info),
-	gproc:send({p, l, main_room}, {self(), ?WSBroadcast, list_to_binary(Coords)}).
-
 get_coords(Info) ->	
 	{ok, {_,_,_,_,_,_,_, Lat_float, Long_float,_,_}} = Info,
 	Latitude = round(Lat_float),
 	Longitude = round(Long_float),
 	lists:concat(["[",Latitude,",",Longitude,"]"]).
 
+vis_request_broadcast(Ip) ->
+	Info = egeoip:lookup(Ip),
+	Coords = get_coords(Info),
+	gproc:send({p, l, main_room}, {self(), ?WSBroadcast, list_to_binary(Coords)}).
 
+stop(_State) ->
+	ok.
