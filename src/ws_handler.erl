@@ -1,13 +1,14 @@
 -module(ws_handler).
 -behaviour(cowboy_websocket_handler).
 
+-include("../include/vis_request.hrl").
+
 -export([init/3]).
 -export([websocket_init/3]).
 -export([websocket_handle/3]).
 -export([websocket_info/3]).
 -export([websocket_terminate/3]).
 
--define(WSBroadcast,"wsbroadcast").
 
 init({tcp, http}, _Req, _Opts) ->
 	{upgrade, protocol, cowboy_websocket}.

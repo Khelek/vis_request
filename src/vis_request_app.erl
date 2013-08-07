@@ -4,12 +4,12 @@
 -module(vis_request_app).
 -behaviour(application).
 
+-include("../include/vis_request.hrl").
 %% API.
 -export([start/2]).
 -export([stop/1]).
 -export([vis_request_broadcast/1]).
 
--define(WSBroadcast,"wsbroadcast").
 
 %% API.
 start(_Type, _Args) ->

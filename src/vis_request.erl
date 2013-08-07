@@ -2,8 +2,6 @@
 
 -module(vis_request).
 
--define(WSBroadcast,"wsbroadcast").
-
 %% API.
 -export([start/0, push_ip/1, bench/1]).
 
@@ -20,8 +18,8 @@ start() ->
 push_ip(Ip) -> 
     case sv:run(ws_q, fun() ->
 	   vis_request_app:vis_request_broadcast(Ip) end)
-    of  {_Pid, ?WSBroadcast, _Coords} -> {ok, Ip};
-        {ok, {_Pid, ?WSBroadcast, _Coords}} -> {ok, Ip};
+    of  {_Pid, _WSBroadcast, _Coords} -> {ok, Ip};
+        {ok, {_Pid, _WSBroadcast, _Coords}} -> {ok, Ip};
         {error, queue_full} -> {error, queue_full};
         {error, overload} -> {error, overload}
     end.
