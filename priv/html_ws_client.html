@@ -55,7 +55,7 @@
 
       function connect()
       {
-          websocket = new WebSocket("ws://localhost:8080/websocket");
+          websocket = new WebSocket("ws://" + location.host + "/websocket");
           websocket.onopen = function(evt) { onOpen(evt) }; 
           websocket.onclose = function(evt) { onClose(evt) }; 
           websocket.onmessage = function(evt) { onMessage(evt) }; 
@@ -67,11 +67,11 @@
       }; 
 
       function onOpen(evt) { 
-          showScreen('<span style="color: green;">CONNECTED </span>'); 
+          //showScreen('<span style="color: green;">CONNECTED </span>'); 
       };  
 
       function onClose(evt) { 
-          showScreen('<span style="color: red;">DISCONNECTED </span>');
+          //showScreen('<span style="color: red;">DISCONNECTED </span>');
       };  
 
       function onMessage(evt) { 
@@ -87,8 +87,6 @@
   </head>
 
   <body>
-    <div id="status"></div>   <br> 
-    <div id="info">To turn on/off fullscreen mode press "f"</div>   <br>     
     <div id="output"></div>
   </body>
 </html> 

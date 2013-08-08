@@ -12,7 +12,7 @@ function webglGlobeInit() {
 }
 function animateScene() {
     var cameraPos = {x: camera.position.x, y: camera.position.y, z: camera.position.z}
-    var newCameraPos = {x: 200, y: 200, z: 100}
+    var newCameraPos = {x: 50, y: 100, z: 250}
     var tweenToMove = new TWEEN.Tween(cameraPos).to(newCameraPos, 3500);
     tweenToMove.onUpdate(function() {
         camera.position.x = cameraPos.x;
@@ -89,7 +89,7 @@ function init() {
 
     var dirLight;
     dirLight = new THREE.DirectionalLight(0xeeeeee);
-    dirLight.position.set(-12, 6, 12).normalize();
+    dirLight.position.set(-12, 30, 12).normalize();
     scene.add(dirLight);
     var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
     var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000011, side: THREE.BackSide } );
@@ -102,20 +102,22 @@ function init() {
 }
 
 function addGlobe() {
-    var colors = THREE.ImageUtils.loadTexture( "/static/images/earth-day.jpg" );
-    var bumpy = THREE.ImageUtils.loadTexture( "/static/images/earth-topo.jpg" );
+    var colors = THREE.ImageUtils.loadTexture( "/static/images/earth-clouds-8k.jpg" );
+    var bumpy = THREE.ImageUtils.loadTexture( "/static/images/earth-bump-8k.jpg" );
     var shiny = THREE.ImageUtils.loadTexture( "/static/images/earth-specular.jpg" );
 
     var superTexture = new THREE.MeshPhongMaterial( { color: 0xffffff, map: colors,
         bumpMap: bumpy, bumpScale: 4, specular: 0xffffff, specularMap: shiny, emissive: 0x888888 } );
 
     var globRadius = radius;
-    var globeGeometry = new THREE.SphereGeometry(globRadius, 32, 32);
+    var globeGeometry = new THREE.SphereGeometry(globRadius, 128, 128);
     globe = new THREE.Mesh(globeGeometry, superTexture);
     scene.add(globe);
-    var axes = new THREE.AxisHelper(550);
-    axes.position = globe.position;
-    scene.add(axes);
+    if(0) {
+        var axes = new THREE.AxisHelper(550);
+        axes.position = globe.position;
+        scene.add(axes);
+    }
 
     var particleTexture = THREE.ImageUtils.loadTexture( '/static/images/spark.png' );
     particleGroup = new THREE.Object3D();
@@ -176,8 +178,8 @@ function animate() {
 
 function render() {
     var time = 4 * clock.getElapsedTime();
-    globe.rotation.y += 0.003;
-    particleGroup.rotation.y += 0.003;
+    globe.rotation.y += 0.0003;
+    particleGroup.rotation.y += 0.0003;
     controls.update();
     stats.update();
     renderer.render(scene, camera);
