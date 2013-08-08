@@ -3,32 +3,32 @@
 -module(vis_request).
 
 %% API.
--export([start/0, push_ip/1, bench/1]).
+-export([start/0, stop/0, push_ip/1, bench/1]).
 
 start() ->
-	ok = application:ensure_started(crypto),
-	ok = application:ensure_started(ranch),
-	ok = application:ensure_started(cowboy),
-	ok = application:ensure_started(gproc),
-	ok = egeoip_just_start(),    
-    ok = application:ensure_started(lager),
-   	ok = application:ensure_started(safetyvalve),
-    ok = application:ensure_started(vis_request).
+    ok = application:start(crypto),
+    ok = application:start(ranch),
+    ok = application:start(cowboy),
+    ok = application:start(gproc),
+    ok = application:start(lager),
+    ok = application:start(safetyvalve),
+    ok = egeoip_just_start(),
+    ok = application:start(vis_request).
 
-stop() -> 
-    application:stop(crypto),
-    application:stop(ranch),
-    application:stop(cowboy),
-    application:stop(gproc),
-    application:stop(egeoip),    
-    application:stop(lager),
+stop() ->
+    application:stop(vis_request),
     application:stop(safetyvalve),
-    application:stop(vis_request).
+    application:stop(egeoip),
+    application:stop(lager),
+    application:stop(gproc),
+    application:stop(cowboy),
+    application:stop(ranch),
+    application:stop(crypto).
 
 -spec push_ip(string()) -> {ok, pid()}.
-push_ip(Ip) -> 
+push_ip(Ip) ->
     case sv:run(ws_q, fun() ->
-	   vis_request_app:vis_request_broadcast(Ip) end)
+       vis_request_app:vis_request_broadcast(Ip) end)
     of  {ok, {_Pid, _WSBroadcast, _Coords}} -> {ok, Ip};
         {error, queue_full} -> {ok, queue_full};
         {error, overload} -> {ok, overload}
@@ -63,7 +63,7 @@ unixtime({MegaSecs, Secs, MicroSecs}) ->
 
 geodbname() ->
     {ok, Cwd} = file:get_cwd(),
-    Filename = filename:join([Cwd, "priv", "GeoLiteCity.dat"]).
+    _Filename = filename:join([Cwd, "priv", "GeoLiteCity.dat"]).
 
 egeoip_just_start() -> 
     case egeoip:start(geodbname()) 

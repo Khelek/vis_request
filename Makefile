@@ -17,4 +17,4 @@ clean:
 
 start:
 	erl -config app.config -pa ebin deps/*/ebin -s vis_request \
-    	-eval "io:format(\"Point your browser at http://localhost:8080/ to use a simple websocket client~n\")."
+    	-eval "io:format(\"Point your browser to http://localhost:PORT/ where PORT is as configured in app.config~n\")."

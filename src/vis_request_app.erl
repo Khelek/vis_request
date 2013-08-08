@@ -23,7 +23,8 @@ start(_Type, _Args) ->
 			]}
 		]}			
 	]),
-	{ok, _} = cowboy:start_http(http, 100, [{port, 8080}],
+    {ok, Port} = application:get_env(port),
+	{ok, _} = cowboy:start_http(http, 100, [{port, Port}],
 		[{env, [{dispatch, Dispatch}]}]).
 
 stop(_State) ->
