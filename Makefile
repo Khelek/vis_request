@@ -9,7 +9,8 @@ compile:
 	$(REBAR) compile 
 
 tests: 
-	$(REBAR) skip_deps=true eunit 
+	$(REBAR) -C rebar.test.config get-deps compile
+	ERL_FLAGS="-config app.config" $(REBAR) -C rebar.test.config skip_deps=true eunit 
 
 clean:
 	$(REBAR) clean 

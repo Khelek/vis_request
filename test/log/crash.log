@@ -700,3 +700,80 @@
 ** Request was [{socket,#Port<0.8216>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.526.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},33923}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"connection">>,<<"keep-alive">>},{<<"user-agent">>,<<"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36">>},{<<"accept">>,<<"*/*">>},{<<"referer">>,<<"http://localhost:8080/">>},{<<"accept-encoding">>,<<"gzip,deflate,sdch">>},{<<"accept-language">>,<<"ru,en-US;q=0.8,en;q=0.6">>}]},{p_headers,[{<<"connection">>,[<<"keep-alive">>]}]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
 ** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
 
+2013-08-08 12:50:34 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6308>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.296.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},49464}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:50:45 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6315>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.299.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},39808}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:50:56 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6318>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.302.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},57313}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:06 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6321>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.305.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},34066}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:07 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6324>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.307.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},50877}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:10 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6327>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.309.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},36303}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:18 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6330>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.312.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},39323}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"user-agent">>,<<"Cow">>}]},{p_headers,[]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:27 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6332>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.314.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},52565}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"connection">>,<<"keep-alive">>},{<<"accept">>,<<"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8">>},{<<"user-agent">>,<<"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36">>},{<<"accept-encoding">>,<<"gzip,deflate,sdch">>},{<<"accept-language">>,<<"ru,en-US;q=0.8,en;q=0.6">>}]},{p_headers,[{<<"connection">>,[<<"keep-alive">>]}]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:27 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6334>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.315.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},52566}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"connection">>,<<"keep-alive">>},{<<"user-agent">>,<<"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36">>},{<<"accept">>,<<"*/*">>},{<<"referer">>,<<"http://localhost:8080/">>},{<<"accept-encoding">>,<<"gzip,deflate,sdch">>},{<<"accept-language">>,<<"ru,en-US;q=0.8,en;q=0.6">>}]},{p_headers,[{<<"connection">>,[<<"keep-alive">>]}]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:43 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6337>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.318.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},52569}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"connection">>,<<"keep-alive">>},{<<"accept">>,<<"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8">>},{<<"user-agent">>,<<"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36">>},{<<"accept-encoding">>,<<"gzip,deflate,sdch">>},{<<"accept-language">>,<<"ru,en-US;q=0.8,en;q=0.6">>}]},{p_headers,[{<<"connection">>,[<<"keep-alive">>]}]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+
+2013-08-08 12:52:43 =ERROR REPORT====
+** Cowboy handler toppage_handler terminating in handle/2
+   for the reason error:{badmatch,{error,enoent}}
+** Handler state was undefined
+** Request was [{socket,#Port<0.6339>},{transport,ranch_tcp},{connection,keepalive},{pid,<0.319.0>},{method,<<"GET">>},{version,'HTTP/1.1'},{peer,{{127,0,0,1},52570}},{host,<<"localhost">>},{host_info,undefined},{port,8080},{path,<<"/">>},{path_info,undefined},{qs,<<>>},{qs_vals,undefined},{bindings,[]},{headers,[{<<"host">>,<<"localhost:8080">>},{<<"connection">>,<<"keep-alive">>},{<<"user-agent">>,<<"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36">>},{<<"accept">>,<<"*/*">>},{<<"referer">>,<<"http://localhost:8080/">>},{<<"accept-encoding">>,<<"gzip,deflate,sdch">>},{<<"accept-language">>,<<"ru,en-US;q=0.8,en;q=0.6">>}]},{p_headers,[{<<"connection">>,[<<"keep-alive">>]}]},{cookies,undefined},{meta,[]},{body_state,waiting},{multipart,undefined},{buffer,<<>>},{resp_compress,false},{resp_state,waiting},{resp_headers,[]},{resp_body,<<>>},{onresponse,undefined}]
+** Stacktrace: [{toppage_handler,get_html,0,[{file,"src/toppage_handler.erl"},{line,25}]},{toppage_handler,handle,2,[{file,"src/toppage_handler.erl"},{line,13}]},{cowboy_handler,handler_handle,4,[{file,"src/cowboy_handler.erl"},{line,119}]},{cowboy_protocol,execute,4,[{file,"src/cowboy_protocol.erl"},{line,523}]}]
+

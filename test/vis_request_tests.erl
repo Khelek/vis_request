@@ -12,7 +12,8 @@ vis_request_test_() ->
       fun (_) -> stop_apps() end, % clean
       [test_push_ip(),
        test_broadcast(),
-       test_egeoip()]
+       test_egeoip(),
+       test_connect()]
     }
   }.
 
@@ -26,15 +27,9 @@ test_broadcast() ->
     {_Pid, "wsbroadcast", <<"[54,48]">>} = vis_request_app:vis_request_broadcast("109.195.193.137"))].
 
 test_connect() -> 
-  {spawn,
-    {setup,
-      fun () -> ok end, % init
-      fun (_) -> stop_apps() end, % clean
-      [?assertNotException(error, badmatch, 
-        {ok, {{_Version, 200, _ReasonPhrase}, _Headers, _Body}} = 
-           httpc:request(?TRACKER_URL))]
-    }
-  }.
+      ?_assertEqual(ok, element(1, fun() -> 
+        {ok, Client} = cowboy_client:init([]),
+        cowboy_client:request(<<"GET">>, <<"http://localhost:8080">>, Client) end)).
 
 test_egeoip() -> 
   ?_assertEqual(ok, element(1, egeoip:lookup("109.195.193.137"))).
