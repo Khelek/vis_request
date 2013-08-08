@@ -27,9 +27,9 @@ test_broadcast() ->
     {_Pid, "wsbroadcast", <<"[54,48]">>} = vis_request_app:vis_request_broadcast("109.195.193.137"))].
 
 test_connect() -> 
-      ?_assertEqual(ok, element(1, fun() -> 
+      ?_assertEqual(ok, element(1, (fun() -> 
         {ok, Client} = cowboy_client:init([]),
-        cowboy_client:request(<<"GET">>, <<"http://localhost:8080">>, Client) end)).
+        cowboy_client:request(<<"GET">>, <<"http://localhost:8080">>, Client) end)())).
 
 test_egeoip() -> 
   ?_assertEqual(ok, element(1, egeoip:lookup("109.195.193.137"))).
