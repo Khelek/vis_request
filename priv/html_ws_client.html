@@ -44,7 +44,11 @@
       $(document).ready(initWebsocketsAndGlobe);
       
       function initWebsocketsAndGlobe() {
-          webglGlobeInit();
+          try {
+              webglGlobeInit();
+          } catch(e) {
+              console.error(e.message);
+          }
           if(!("WebSocket" in window)){  
               $('#status').append('<p><span style="color: red;">websockets are not supported </span></p>');
           } else {

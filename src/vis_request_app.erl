@@ -25,7 +25,7 @@ start(_Type, _Args) ->
 	]),
     {ok, Port} = application:get_env(port),
 	{ok, _} = cowboy:start_http(http, 100, [{port, Port}],
-		[{env, [{dispatch, Dispatch}]}]).
+		[{env, [{dispatch, Dispatch}]}, {timeout, 20000}]).
 
 stop(_State) ->
 	ok.

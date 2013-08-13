@@ -10,6 +10,7 @@ function webglGlobeInit() {
     animate();
     animateScene();
 }
+
 function animateScene() {
     var cameraPos = {x: camera.position.x, y: camera.position.y, z: camera.position.z}
     var newCameraPos = {x: 50, y: 100, z: 250}
@@ -58,7 +59,7 @@ function animationSprite(sprite) {
 
 function init() {
     if ( ! Detector.webgl )
-        Detector.addGetWebGLMessage();
+        Detector.addGetWebGLMessage();    
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000000, 0.0001);
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -98,7 +99,6 @@ function init() {
 
     addGlobe();
     addStars();
-
 }
 
 function addGlobe() {
