@@ -46,7 +46,7 @@ bench(Count) ->
                  "64.180.1.78",
                  "138.217.4.11"],
     StartParse = now(),
-    benchcall(fun () -> [push_ip(X) || X <- SampleIPs] end, trunc(Count/length(SampleIPs))),
+    benchcall(fun () -> [push_ip(X) || X <- SampleIPs] end, round(Count/length(SampleIPs))),
     EndParse = now(),
     {end_benchmark, unixtime(EndParse) - unixtime(StartParse)}.
 
