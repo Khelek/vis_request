@@ -1,6 +1,6 @@
 var container, scene, camera, renderer, controls, stats;
 var clock = new THREE.Clock();
-var globe;
+var globe, clouds;
 var radius = 100;
 var particleGroup, particleAttributes;
 
@@ -50,9 +50,9 @@ function animationSprite(sprite) {
     tweenExpande.chain(tweenSqueeze);
     tweenExpande.start();
     tweenSqueeze.onComplete(
-    function(){
-        particleGroup.remove(sprite);
-    });
+        function(){
+            particleGroup.remove(sprite);
+        });
 }
 
 
@@ -106,24 +106,31 @@ function addGlobe() {
     var bumpy = THREE.ImageUtils.loadTexture( "/static/images/earth-bump-8k.jpg" );
     var shiny = THREE.ImageUtils.loadTexture( "/static/images/earth-specular.jpg" );
 
+
     var superTexture = new THREE.MeshPhongMaterial( { color: 0xffffff, map: colors,
-        bumpMap: bumpy, bumpScale: 4, specular: 0xffffff, specularMap: shiny, emissive: 0x888888 } );
+        bumpMap: bumpy, bumpScale: 4, specular: 0xffffff, specularMap: shiny, emissive: 0x888888,
+        reflectivity: 10, uReflectivity: shiny } );
 
     var globRadius = radius;
     var globeGeometry = new THREE.SphereGeometry(globRadius, 128, 128);
     globe = new THREE.Mesh(globeGeometry, superTexture);
     scene.add(globe);
-    if(0) {
-        var axes = new THREE.AxisHelper(550);
-        axes.position = globe.position;
-        scene.add(axes);
-    }
 
+   /*  Здесь использовать шейдеры webGL
+
+    var cloudMaterial = new THREE.MeshNormalMaterial({color: 0xffffff, lightMap: THREE.ImageUtils.loadTexture( "/static/images/clouds-8k.jpg" ), transparent: true});
+    cloudMaterial.blending = THREE.NormalBlending;
+    cloudMaterial.blendSrc = THREE.SrcAlphaFactor;
+    cloudMaterial.blendDst = THREE.SrcColorFactor;
+    cloudMaterial.blendEquation = THREE.AddEquation;
+    var cloudSphere = new THREE.Mesh( globeGeometry.clone(), cloudMaterial );
+    cloudSphere.scale.x = cloudSphere.scale.y = cloudSphere.scale.z = 1.01;
+    scene.add(cloudSphere);
+    */
     var particleTexture = THREE.ImageUtils.loadTexture( '/static/images/spark.png' );
     particleGroup = new THREE.Object3D();
+    particleGroup.dynamic = true;
     particleAttributes = { startSize: [], startPosition: [], randomness: [] };
-    var totalParticles = 1;
-    var radiusRange = globRadius + 2;
     particleGroup.position.y = globe.position.y;
     particleGroup.position.x = globe.position.x;
     scene.add(particleGroup);
@@ -180,6 +187,7 @@ function render() {
     var time = 4 * clock.getElapsedTime();
     globe.rotation.y += 0.0003;
     particleGroup.rotation.y += 0.0003;
+   // clouds.rotation.y += 0.0005;
     controls.update();
     stats.update();
     renderer.render(scene, camera);
@@ -193,14 +201,49 @@ function addSprite(lat, long) {
     sprite.scale.set(1, 1, 1.0);
     var coord = getCoordinate(lat,long);
     sprite.position.set(coord.tx,coord.ty, coord.tz);
-    sprite.position.setLength(radius +2);
+    sprite.position.setLength(radius + 2);
     // sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() );
     sprite.material.color.setHSL(1.0, 1.0, 2.0 );
     sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
     particleGroup.add(sprite);
     animationSprite(sprite);
 }
+function addTorus(lat, long) {
+    var geometry = new THREE.TorusGeometry(2,1,4,30);
+    var material = new THREE.MeshBasicMaterial({color:0x22aaff, transparent: true, opacity: 0.9});
+    var torus = new THREE.Mesh(geometry, material);
+    var coord = getCoordinate(lat, long);
+    torus.position.set(coord.tx,coord.ty, coord.tz);
+    torus.position.setLength(radius + 0.1);
+    torus.lookAt(globe.position);
+    torus.material.blending = THREE.NormalBlending;
+    material.blendSrc = THREE.SrcAlphaFactor;
+    material.blendDst = THREE.SrcColorFactor;
+    material.blendEquation = THREE.AddEquation;
+    particleGroup.add(torus);
+    animateTorus(torus);
+}
 
+function animateTorus(torus) {
+    currentParam = {r: torus.material.color.r, g: torus.material.color.g, b: torus.material.color.b,
+        radius: torus.geometry.radius, scaleX: torus.scale.x, scaleY: torus.scale.y, opacity: torus.material.opacity};
+    newParam = {r: 0.3, g: 0.4, b: 0.3, scaleX:3, scaleY:3, opacity: 0.15};
+    torus.geometry.radius.needsUpdate = true;
+    var tween = new TWEEN.Tween(currentParam).to(newParam);
+    tween.onUpdate( function() {
+        console.log(torus.material.opacity);
+        torus.material.color.r = currentParam.r;
+        torus.material.color.g = currentParam.g;
+        torus.material.color.b = currentParam.b;
+        torus.scale.x = currentParam.scaleX;
+        torus.scale.y = currentParam.scaleY;
+        torus.material.opacity = currentParam.opacity;
+    });
+    tween.onComplete( function() {
+        particleGroup.remove(torus);
+    });
+    tween.start();
+}
 function getCoordinate(latitude, longitude) {
     latitude = latitude * Math.PI / 180;
     longitude = -longitude * Math.PI / 180;
@@ -208,10 +251,11 @@ function getCoordinate(latitude, longitude) {
         "ty":radius * Math.sin(latitude),
         "tz":radius * Math.cos(latitude) * Math.sin(longitude)};
     return coordinate;
-
 }
-/*setInterval( function() {
-    for (i = 0; i < 10; i++){
-        addSprite( Math.random() * 180 - 90, Math.random() * 360 - 180);
-    };
-}, 500)       */
+
+
+setInterval( function() {
+ for (i = 0; i < 7; i++){
+ addTorus( Math.random() * 180 - 90, Math.random() * 360 - 180);
+ };
+ }, 1500)
