@@ -27,12 +27,8 @@ stop() ->
 
 -spec push_ip(string()) -> {ok, pid()}.
 push_ip(Ip) ->
-    case sv:run(ws_q, fun() ->
-       vis_request_app:vis_request_broadcast(Ip) end)
-    of  {ok, {_Pid, _WSBroadcast, _Coords}} -> {ok, Ip};
-        {error, queue_full} -> {ok, queue_full};
-        {error, overload} -> {ok, overload}
-    end.
+    sv:run(ws_q, fun() ->
+       spawn(  fun() -> vis_request_app:vis_request_broadcast(Ip) end ) end).
 
 bench(Count) ->
     SampleIPs = ["63.224.214.117",
