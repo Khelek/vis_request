@@ -1,16 +1,21 @@
 -compile(export_all).
--module(vis_request_client).
+-module(w_client).
 
 %% API.
--export([my_websocket_client/0]).
+-export([my/1]).
 
 
 %% API.
-my_websocket_client() ->
-	websocket_client("localhost", 8081, "/websocket").
+my(deaf) ->
+	websocket_client("localhost", 8081, "/websocket");
+my(good) -> 
+  Socket = websocket_client("localhost", 8081, "/websocket"),
+  inet:setopts(Socket, [{active, true}]),
+  Socket.
 
 websocket_client(Host, Port, Path) -> 
 	Socket = connect(Host, Port),
+  inet:setopts(Socket, [{active, false}]),
 	Key = generate_ws_key(),
 	ok = websocket_handshake(Socket, Host, Path, Key),
 	Socket. 
