@@ -65,16 +65,12 @@ function init() {
     loader.addHierarchyHandler( "dae", THREE.ColladaLoader );
     loader.addHierarchyHandler( "utf8", THREE.UTF8Loader );
     loader.load( "/static/js/texture.js",  function ( result ) {
-        alert("Ok");
         superTexture = result.materials.superTexture;
         var progressbar = document.getElementById("progressbar");
         progressbar.style.display = "none";
         container.style.display = "block";
         createScene();
         superTexture.needsUpdate = true;
-        /*superTexture.color =  0xffffff;
-        superTexture.specular = 0xffffff;
-        superTexture.emissive = 0x888888;*/
         animate();
         animateScene();
     } );
@@ -86,21 +82,9 @@ function init() {
 }
 function addGlobe() {
     var globRadius = radius;
-
     var globeGeometry = new THREE.SphereGeometry(globRadius, 128, 128);
     globe = new THREE.Mesh(globeGeometry, superTexture);
     scene.add(globe);
-
-   /*  Здесь использовать шейдеры webGL
-    var cloudMaterial = new THREE.MeshNormalMaterial({color: 0xffffff, lightMap: THREE.ImageUtils.loadTexture( "/static/images/clouds-8k.jpg" ), transparent: true});
-    cloudMaterial.blending = THREE.NormalBlending;
-    cloudMaterial.blendSrc = THREE.SrcAlphaFactor;
-    cloudMaterial.blendDst = THREE.SrcColorFactor;
-    cloudMaterial.blendEquation = THREE.AddEquation;
-    var cloudSphere = new THREE.Mesh( globeGeometry.clone(), cloudMaterial );
-    cloudSphere.scale.x = cloudSphere.scale.y = cloudSphere.scale.z = 1.01;
-    scene.add(cloudSphere);
-    */
     var particleTexture = THREE.ImageUtils.loadTexture( '/static/images/spark.png' );
     particleGroup = new THREE.Object3D();
     particleGroup.dynamic = true;
@@ -156,7 +140,6 @@ function animate() {
 }
 
 function render() {
-    //clouds.rotation += 0.0004;
     var time = 4 * clock.getElapsedTime();
     globe.rotation.y += 0.0003;
     particleGroup.rotation.y += 0.0003;
