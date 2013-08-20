@@ -1,18 +1,16 @@
 var container, scene, camera, renderer, controls, stats;
 var clock = new THREE.Clock();
-var globe, clouds;
+var globe, superTexture;
 var radius = 100;
 var particleGroup, particleAttributes;
 
 
 function webglGlobeInit() {
     init();
-    animate();
-    animateScene();
 }
 function animateScene() {
-    var cameraPos = {x: camera.position.x, y: camera.position.y, z: camera.position.z}
-    var newCameraPos = {x: 50, y: 100, z: 250}
+    var cameraPos = {x: camera.position.x, y: camera.position.y, z: camera.position.z};
+    var newCameraPos = {x: 50, y: 100, z: 250};
     var tweenToMove = new TWEEN.Tween(cameraPos).to(newCameraPos, 3500);
     tweenToMove.onUpdate(function() {
         camera.position.x = cameraPos.x;
@@ -21,44 +19,8 @@ function animateScene() {
     })
     tweenToMove.start();
 }
-function animationSprite(sprite) {
-    var scaleCurrent = {x: sprite.scale.x, y: sprite.scale.y, z: sprite.scale.z,
-        r : sprite.material.color.r, g: sprite.material.color.g, b: sprite.material.color.b, opacity: sprite.material.opacity};
 
-    var scale = {x: 12, y: 12, z: 1, r: 3, g: 0, b:0};
-    var tweenExpande = new TWEEN.Tween(scaleCurrent).to(scale, 900);
-    tweenExpande.onUpdate(function() {
-        sprite.scale.x = scaleCurrent.x;
-        sprite.scale.y = scaleCurrent.y;
-        sprite.scale.z = scaleCurrent.z;
-        sprite.material.color.r = scaleCurrent.r;
-        sprite.material.color.g = scaleCurrent.g;
-        sprite.material.color.b = scaleCurrent.b;
-    });
-
-    var reverScale = {x: 1, y: 1, z: 1, r: 1, g: 1, b:3, opacity: 0};
-    var tweenSqueeze = new  TWEEN.Tween(scaleCurrent).to(reverScale, 400);
-    tweenSqueeze.onUpdate(function() {
-        sprite.scale.x = scaleCurrent.x;
-        sprite.scale.y = scaleCurrent.y;
-        sprite.scale.z = scaleCurrent.z;
-        sprite.material.color.r = scaleCurrent.r;
-        sprite.material.color.g = scaleCurrent.g;
-        sprite.material.color.b = scaleCurrent.b;
-        sprite.material.opacity = scaleCurrent.opacity;
-    });
-    tweenExpande.chain(tweenSqueeze);
-    tweenExpande.start();
-    tweenSqueeze.onComplete(
-        function(){
-            particleGroup.remove(sprite);
-        });
-}
-
-
-function init() {
-    if ( ! Detector.webgl )
-        Detector.addGetWebGLMessage();
+function createScene() {
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000000, 0.0001);
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -67,11 +29,19 @@ function init() {
     scene.add(camera);
     camera.position.set(-100,150,650);
     camera.lookAt(scene.position);
+    var dirLight;
+    dirLight = new THREE.DirectionalLight(0xffffff);
+    dirLight.position.set(-12, 30, 12).normalize();
+    scene.add(dirLight);
+    var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
+    var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000011, side: THREE.BackSide } );
+    var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+    scene.add(skyBox);
+    addGlobe();
+    addStars();
     renderer = new THREE.WebGLRenderer( {antialias:true} );
     renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     renderer.autoClear = false;
-    container = document.createElement('div');
-    document.body.appendChild(container);
     container.appendChild(renderer.domElement);
     THREEx.WindowResize(renderer, camera);
     THREEx.FullScreen.bindKey({ charCode : 'f'.charCodeAt(0) });
@@ -81,43 +51,47 @@ function init() {
     controls.minDistance = 200;
     controls.minPolarAngle = Math.PI * .2;
     controls.maxPolarAngle = Math.PI * .8;
+
+}
+
+function init() {
+    if ( ! Detector.webgl )
+        Detector.addGetWebGLMessage();
+    container = document.getElementById('output');
+    document.body.appendChild(container);
+    var loader = new THREE.SceneLoader();
+    loader.addGeometryHandler( "binary", THREE.BinaryLoader );
+    loader.addHierarchyHandler( "obj", THREE.OBJLoader );
+    loader.addHierarchyHandler( "dae", THREE.ColladaLoader );
+    loader.addHierarchyHandler( "utf8", THREE.UTF8Loader );
+    loader.load( "/static/js/texture.js",  function ( result ) {
+        alert("Ok");
+        superTexture = result.materials.superTexture;
+        var progressbar = document.getElementById("progressbar");
+        progressbar.style.display = "none";
+        container.style.display = "block";
+        createScene();
+        superTexture.needsUpdate = true;
+        /*superTexture.color =  0xffffff;
+        superTexture.specular = 0xffffff;
+        superTexture.emissive = 0x888888;*/
+        animate();
+        animateScene();
+    } );
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
     stats.domElement.style.zIndex = 100;
     container.appendChild(stats.domElement);
-
-    var dirLight;
-    dirLight = new THREE.DirectionalLight(0xeeeeee);
-    dirLight.position.set(-12, 30, 12).normalize();
-    scene.add(dirLight);
-    var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
-    var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000011, side: THREE.BackSide } );
-    var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-    scene.add(skyBox);
-
-    addGlobe();
-    addStars();
-
 }
-
 function addGlobe() {
-    var colors = THREE.ImageUtils.loadTexture( "/static/images/earth-clouds-8k.jpg" );
-    var bumpy = THREE.ImageUtils.loadTexture( "/static/images/earth-bump-8k.jpg" );
-    var shiny = THREE.ImageUtils.loadTexture( "/static/images/earth-specular.jpg" );
-
-
-    var superTexture = new THREE.MeshPhongMaterial( { color: 0xffffff, map: colors,
-        bumpMap: bumpy, bumpScale: 4, specular: 0xffffff, specularMap: shiny, emissive: 0x888888,
-        reflectivity: 10, uReflectivity: shiny } );
-
     var globRadius = radius;
+
     var globeGeometry = new THREE.SphereGeometry(globRadius, 128, 128);
     globe = new THREE.Mesh(globeGeometry, superTexture);
     scene.add(globe);
 
    /*  Здесь использовать шейдеры webGL
-
     var cloudMaterial = new THREE.MeshNormalMaterial({color: 0xffffff, lightMap: THREE.ImageUtils.loadTexture( "/static/images/clouds-8k.jpg" ), transparent: true});
     cloudMaterial.blending = THREE.NormalBlending;
     cloudMaterial.blendSrc = THREE.SrcAlphaFactor;
@@ -134,7 +108,6 @@ function addGlobe() {
     particleGroup.position.y = globe.position.y;
     particleGroup.position.x = globe.position.x;
     scene.add(particleGroup);
-
 }
 
 function addStars() {
@@ -182,46 +155,33 @@ function animate() {
     TWEEN.update();
 }
 
-
 function render() {
+    //clouds.rotation += 0.0004;
     var time = 4 * clock.getElapsedTime();
     globe.rotation.y += 0.0003;
     particleGroup.rotation.y += 0.0003;
-   // clouds.rotation.y += 0.0005;
     controls.update();
     stats.update();
     renderer.render(scene, camera);
 }
 
-var particleTexture = THREE.ImageUtils.loadTexture( '/static/images/spark.png' );
 
-function addSprite(lat, long) {
-    var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
-    sprite = new THREE.Sprite( spriteMaterial );
-    sprite.scale.set(1, 1, 1.0);
-    var coord = getCoordinate(lat,long);
-    sprite.position.set(coord.tx,coord.ty, coord.tz);
-    sprite.position.setLength(radius + 2);
-    // sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() );
-    sprite.material.color.setHSL(1.0, 1.0, 2.0 );
-    sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
-    particleGroup.add(sprite);
-    animationSprite(sprite);
-}
 function addTorus(lat, long) {
-    var geometry = new THREE.TorusGeometry(2,1,4,30);
-    var material = new THREE.MeshBasicMaterial({color:0x22aaff, transparent: true, opacity: 0.9});
-    var torus = new THREE.Mesh(geometry, material);
-    var coord = getCoordinate(lat, long);
-    torus.position.set(coord.tx,coord.ty, coord.tz);
-    torus.position.setLength(radius + 0.1);
-    torus.lookAt(globe.position);
-    torus.material.blending = THREE.NormalBlending;
-    material.blendSrc = THREE.SrcAlphaFactor;
-    material.blendDst = THREE.SrcColorFactor;
-    material.blendEquation = THREE.AddEquation;
-    particleGroup.add(torus);
-    animateTorus(torus);
+    if(globe){
+        var geometry = new THREE.TorusGeometry(2,1,4,30);
+        var material = new THREE.MeshBasicMaterial({color:0x22aaff, transparent: true, opacity: 0.9});
+        var torus = new THREE.Mesh(geometry, material);
+        var coord = getCoordinate(lat, long);
+        torus.position.set(coord.tx,coord.ty, coord.tz);
+        torus.position.setLength(radius + 0.1);
+        torus.lookAt(globe.position);
+        torus.material.blending = THREE.NormalBlending;
+        material.blendSrc = THREE.SrcAlphaFactor;
+        material.blendDst = THREE.SrcColorFactor;
+        material.blendEquation = THREE.AddEquation;
+        particleGroup.add(torus);
+        animateTorus(torus);
+    }
 }
 
 function animateTorus(torus) {
@@ -254,8 +214,9 @@ function getCoordinate(latitude, longitude) {
 }
 
 
+/*
 setInterval( function() {
- for (i = 0; i < 7; i++){
- addTorus( Math.random() * 180 - 90, Math.random() * 360 - 180);
- };
- }, 1500)
+     for (i = 0; i < 7; i++){
+        addTorus( Math.random() * 180 - 90, Math.random() * 360 - 180);
+     };
+ }, 1500) */
