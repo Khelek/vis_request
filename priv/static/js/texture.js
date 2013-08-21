@@ -14,11 +14,10 @@
     },
     "materials" :
     {
-
             "superTexture" : {
                 "type" : "MeshPhongMaterial",
-                    "parameters": { "map" : "colors", "bumpMap": "bumpy", "bumpScale": 4, "specularMap": "shiny",
-                "reflectivity": 10 }
+                    "parameters" : { "color" : "#fff", "specular" : "#fff", "emissive": "#888", "map" : "colors", "bumpMap" : "bumpy", "bumpScale" : 4, "specularMap": "shiny",
+                "reflectivity" : 10 }
 
             }
     },
@@ -28,5 +27,4 @@
         "bgalpha" : 1.000000,
         "camera"  : "default_camera"
     }
-
 }

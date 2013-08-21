@@ -150,7 +150,7 @@ function render() {
 
 
 function addTorus(lat, long) {
-    if(globe){
+    if(globe) {
         var geometry = new THREE.TorusGeometry(2,1,4,30);
         var material = new THREE.MeshBasicMaterial({color:0x22aaff, transparent: true, opacity: 0.9});
         var torus = new THREE.Mesh(geometry, material);
