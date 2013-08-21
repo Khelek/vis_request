@@ -1,5 +1,4 @@
 {
-
     "urlBaseType" : "relativeToScene",
     "textures" : {
         "bumpy": {
@@ -10,6 +9,9 @@
         },
         "colors": {
             "url" : "../../images/earth-clouds-8k.jpg"
+        },
+        "space": {
+            "url" : "../../images/space.jpg"
         }
     },
     "materials" :
@@ -19,6 +21,10 @@
                     "parameters" : { "color" : "#fff", "specular" : "#fff", "emissive": "#888", "map" : "colors", "bumpMap" : "bumpy", "bumpScale" : 4, "specularMap": "shiny",
                 "reflectivity" : 10 }
 
+            },
+            "spaceTexture" : {
+                "type" : "MeshBasicMaterial",
+                "parameters" : { "map" : "space", "side" : "THREE.DoubleSide" }
             }
     },
     "defaults" :

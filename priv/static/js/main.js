@@ -1,6 +1,6 @@
 var container, scene, camera, renderer, controls, stats;
 var clock = new THREE.Clock();
-var globe, superTexture;
+var globe, superTexture, spaceTexture;
 var radius = 100;
 var particleGroup, particleAttributes;
 
@@ -22,7 +22,6 @@ function animateScene() {
 
 function createScene() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x000000, 0.0001);
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 10000;
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -33,9 +32,10 @@ function createScene() {
     dirLight = new THREE.DirectionalLight(0xffffff);
     dirLight.position.set(-12, 30, 12).normalize();
     scene.add(dirLight);
-    var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
-    var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000011, side: THREE.BackSide } );
-    var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+    //var skySphereMaterial = new THREE.MeshBasicMaterial( { color: 0x000011, side: THREE.BackSide } );
+    var skySphere = new THREE.SphereGeometry(10000,100,100);
+    spaceTexture.side = THREE.BackSide;
+    var skyBox = new THREE.Mesh(skySphere, spaceTexture);
     scene.add(skyBox);
     addGlobe();
     addStars();
@@ -45,15 +45,12 @@ function createScene() {
     container.appendChild(renderer.domElement);
     THREEx.WindowResize(renderer, camera);
     THREEx.FullScreen.bindKey({ charCode : 'f'.charCodeAt(0) });
-
     controls = new THREE.OrbitControls(camera);
-    controls.maxDistance = 700;
-    controls.minDistance = 200;
+   // controls.maxDistance = 700;
+   // controls.minDistance = 200;
     controls.minPolarAngle = Math.PI * .2;
     controls.maxPolarAngle = Math.PI * .8;
-
 }
-
 function init() {
     if ( ! Detector.webgl )
         Detector.addGetWebGLMessage();
@@ -66,11 +63,13 @@ function init() {
     loader.addHierarchyHandler( "utf8", THREE.UTF8Loader );
     loader.load( "/static/js/texture.js",  function ( result ) {
         superTexture = result.materials.superTexture;
+        spaceTexture = result.materials.spaceTexture;
+        superTexture.needsUpdate = true;
+        spaceTexture.needsUpdate = true;
         var progressbar = document.getElementById("progressbar");
         progressbar.style.display = "none";
         container.style.display = "block";
         createScene();
-        superTexture.needsUpdate = true;
         animate();
         animateScene();
     } );
@@ -126,7 +125,7 @@ function addStars() {
         stars.rotation.x = Math.random() * 6;
         stars.rotation.y = Math.random() * 6;
         stars.rotation.z = Math.random() * 6;
-        s = i * 10;
+        s = i * 2;
         stars.scale.set( s, s, s );
         stars.matrixAutoUpdate = false;
         stars.updateMatrix();
