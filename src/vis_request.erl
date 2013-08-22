@@ -6,19 +6,19 @@
 -export([start/0, stop/0, push_ip/1, bench/1]).
 
 start() ->
-    ok = application:start(crypto),
-    ok = application:start(ranch),
-    ok = application:start(cowboy),
-    ok = application:start(gproc),
-    ok = application:start(lager),
-    ok = application:start(safetyvalve),
-    ok = egeoip_just_start(),
-    ok = application:start(vis_request).
+    ok = application_just_started(crypto),
+    ok = application_just_started(ranch),
+    ok = application_just_started(cowboy),
+    ok = application_just_started(gproc),
+    ok = application_just_started(lager),
+    ok = application_just_started(safetyvalve),
+    ok = egeoip_just_started(),
+    ok = application_just_started(vis_request).
 
 stop() ->
     application:stop(vis_request),
-    application:stop(safetyvalve),
     application:stop(egeoip),
+    application:stop(safetyvalve),
     application:stop(lager),
     application:stop(gproc),
     application:stop(cowboy),
@@ -27,8 +27,8 @@ stop() ->
 
 -spec push_ip(string()) -> {ok, pid()}.
 push_ip(Ip) ->
-    %sv:run(ws_q, fun() ->
-       spawn(  fun() -> vis_request_app:vis_request_broadcast(Ip) end ).% end).
+    sv:run(ws_q, fun() ->
+       spawn(  fun() -> vis_request_app:vis_request_broadcast(Ip) end ) end).
 
 bench(Count) ->
     SampleIPs = ["63.224.214.117",
@@ -61,9 +61,16 @@ geodbname() ->
     {ok, Cwd} = file:get_cwd(),
     _Filename = filename:join([Cwd, "priv", "GeoLiteCity.dat"]).
 
-egeoip_just_start() -> 
-    case egeoip:start(geodbname()) 
-    of ok -> ok;
-       {error, {already_started,egeoip}} -> ok;
-       {error, Reason} -> {error, Reason}
+application_just_started(App) ->
+    case application:start(App) of 
+        ok -> ok;
+        {error, {already_started, App}} -> ok;
+        {error, Reason} -> {error, Reason}
+    end.
+
+egeoip_just_started() -> 
+    case egeoip:start(geodbname()) of
+        ok -> ok;
+        {error, {already_started, egeoip}} -> ok;
+        {error, Reason} -> {error, Reason}
     end.

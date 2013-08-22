@@ -1,38 +1,24 @@
--compile(export_all).
 -module(w_client).
 
 %% API.
--export([my/1]).
+-export([deaf/0, good/0, websocket_client/4]).
 
 
 %% API.
-my(deaf) ->
-	websocket_client("localhost", 8081, "/websocket");
-my(good) -> 
-  Socket = websocket_client("localhost", 8081, "/websocket"),
-  inet:setopts(Socket, [{active, true}]),
-  Socket.
 
-websocket_client(Host, Port, Path) -> 
+deaf() ->
+	websocket_client("localhost", 8081, "/websocket", [{active, false}]).
+
+good() -> 
+  websocket_client("localhost", 8081, "/websocket", [{active, true}]).
+
+websocket_client(Host, Port, Path, Opts) -> 
 	Socket = connect(Host, Port),
-  inet:setopts(Socket, [{active, false}]),
+  inet:setopts(Socket, [{active, false}]), % from correct websocket_handshake
 	Key = generate_ws_key(),
 	ok = websocket_handshake(Socket, Host, Path, Key),
-	Socket. 
-
-my_client() ->
-	Request = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n",
-	client("localhost", 8081, Request).
-
-client(Host, Port, Request) -> 
-	Socket = connect(Host, Port),
-	Response = send_and_receive(Socket, Request),	
-	gen_tcp:close(Socket),
-    Response.
-
-send_and_receive(Socket, Request) -> 
-	gen_tcp:send(Socket, Request),
-	gen_tcp:recv(Socket, 0).
+  inet:setopts(Socket, Opts),
+	Socket.
 
 connect(Host, Port) -> connect(Host, Port, [binary, {packet, 0}, {active, false}, {keepalive, true}]).
 
@@ -72,7 +58,7 @@ receive_handshake(Buffer, Socket) ->
 
 validate_handshake(HandshakeResponse, Key) ->
     Challenge = base64:encode(
-                  crypto:sha(<< Key/binary, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" >>)),
+                  crypto:hash(sha, << Key/binary, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" >>)),
     {match, [Challenge]} = re:run(
                              HandshakeResponse,
                              ".*[s|S]ec-[w|W]eb[s|S]ocket-[a|A]ccept: (.*)\\r\\n.*",
