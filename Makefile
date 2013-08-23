@@ -16,5 +16,10 @@ clean:
 	$(REBAR) clean 
 
 start:
-	erl -config app.config -pa ebin deps/*/ebin -s vis_request \
+	erl -sname server -setcookie mars -config app.config -pa ebin deps/*/ebin -s vis_request \
 	-eval "io:format(\"Point your browser to http://localhost:PORT/ where PORT is as configured in app.config~n\")."
+dbg: 
+	erl -sname debug -setcookie mars \
+	-eval "io:format(\"This is a debug node~n\"), \
+		dbg:tracer(), \
+		dbg:n(server@haupc)."

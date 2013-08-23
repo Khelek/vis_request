@@ -25,15 +25,11 @@ websocket_handle(_Data, Req, State) ->
 	{ok, Req, State}.
 
 websocket_info({Pid, ?WSBroadcast, Msg}, Req, State) ->
-    {message_queue_len, Count} = erlang:process_info(self(), message_queue_len),
-    lager:notice("~p", [erlang:process_info(self(), message_queue_len)]),   
-    % lager:notice("queue ~p state ~p", [Count, State]),
-    if 
-    	Count > 500 ->  lager:notice("too many messages ~p", [Count]), 
+    case erlang:process_info(self(), message_queue_len) of
+        {message_queue_len, Count} when Count > 500 ->  lager:warning("too many messages in message queue ~p", [Count]),
     		{shutdown, Req, State};
-    	true -> 
-    		{reply, {text, Msg}, Req, State}
-    		
+        undefined -> lager:error("undefined erlang:process_info"), {shutdown, Req, State};
+        _ -> {reply, {text, Msg}, Req, State}
     end;
 	
 websocket_info(_Info, Req, State) ->	
