@@ -31,11 +31,12 @@ vis_request_broadcast(Ip) ->
 kill_slow_clients(Property) ->
     ListPid = gproc:lookup_local_properties(Property),
     lists:map(fun({Pid, _}) ->
-                      {message_queue_len, Count} = erlang:process_info(Pid, message_queue_len),
-                      if
-                          Count > 500 -> lager:warning("I killed a slow client, pid ~p", [Pid]),
-                                         exit(Pid, kill);
-                          true -> true
+                      case erlang:process_info(Pid, message_queue_len) of
+                          {message_queue_len, Count} when Count > 500 ->
+                              lager:warning("killed slow client, pid ~p", [Pid]),
+                              exit(Pid, kill);
+                          undefined -> true;
+                          _ -> true
                       end
               end, ListPid).
 
