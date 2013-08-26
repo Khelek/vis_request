@@ -11,33 +11,32 @@
 
 
 init({tcp, http}, _Req, _Opts) ->
-	{upgrade, protocol, cowboy_websocket}.
+    {upgrade, protocol, cowboy_websocket}.
 
 websocket_init(_TransportName, Req, _Opts) ->	
-	lager:notice("websocket init"),
-	lager:info("websocket init", [Req]),
-	gproc:reg({p,l, main_room}),
-	{ok, Req, undefined_state}.
+    lager:notice("websocket init"),
+    lager:info("websocket init", [Req]),
+    gproc:reg({p,l, main_room}),
+    {ok, Req, 0}.
 
 websocket_handle(_Data, Req, State) ->	
-	lager:notice("websocket handle"),
-	lager:info("websocket handle", [Req]),
-	{ok, Req, State}.
+    lager:notice("websocket handle"),
+    lager:info("websocket handle", [Req]),
+    {ok, Req, State}.
 
-websocket_info({Pid, ?WSBroadcast, Msg}, Req, State) ->
-    case erlang:process_info(self(), message_queue_len) of
-        {message_queue_len, Count} when Count > 500 ->  lager:warning("too many messages in message queue ~p", [Count]),
-    		{shutdown, Req, State};
-        undefined -> lager:error("undefined erlang:process_info"), {shutdown, Req, State};
-        _ -> {reply, {text, Msg}, Req, State}
+websocket_info({Pid, ?WSBroadcast, Msg}, Req, _State) ->
+    {message_queue_len, Count} = erlang:process_info(self(), message_queue_len),
+    if
+        Count > 500 ->  lager:warning("too many messages in message queue ~p", [Count]),
+                        {shutdown, Req, Count};
+        true -> {reply, {text, Msg}, Req, Count}
     end;
-	
-websocket_info(_Info, Req, State) ->	
-	lager:notice("not response"),
-	lager:info("not response", [Req]),
-	{ok, Req, State}.
+websocket_info(Info, Req, State) ->
+    lager:notice("not response ~p", [Info]),
+    lager:info("not response ~p", [Req]),
+    {ok, Req, State}.
 
 websocket_terminate(_Reason, Req, _State) ->	
-	lager:notice("websocket terminate"),
-	lager:info("websocket terminate", [Req]),
-	ok.
+    lager:notice("websocket terminate"),
+    lager:info("websocket terminate", [Req]),
+    ok.

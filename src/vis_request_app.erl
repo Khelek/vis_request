@@ -10,32 +10,40 @@
 
 %% API.
 start(_Type, _Args) ->
-	Dispatch = cowboy_router:compile([
-		{'_', [
-			{"/", toppage_handler, []},
-			{"/websocket", ws_handler, []},
-			{"/static/[...]", cowboy_static, [
-				{directory, {priv_dir, vis_request, [<<"static">>]}},
-				{mimetypes, {fun mimetypes:path_to_mimes/2, default}}
-			]}
-		]}			
-	]),
+    Dispatch = cowboy_router:compile([{'_', [{"/", toppage_handler, []},
+                                             {"/websocket", ws_handler, []},
+                                             {"/static/[...]", cowboy_static,
+                                              [{directory, {priv_dir, vis_request, [<<"static">>]}},
+                                               {mimetypes, {fun mimetypes:path_to_mimes/2, default}}]}]}
+                                     ]),
     {ok, Port} = application:get_env(port),
-	{ok, _} = cowboy:start_http(http, 100, [{port, Port}],
-		[{env, [{dispatch, Dispatch}]}, {timeout, 20000}]).
+    {ok, _} = cowboy:start_http(http, 100, [{port, Port}],
+                                [{env, [{dispatch, Dispatch}]}, {timeout, 20000}]).
 
-stop(_State) ->
-	ok.
+stop(_State) -> ok.
 
 vis_request_broadcast(Ip) ->
-	Info = egeoip:lookup(Ip),
-	Coords = get_coords(Info),
-	gproc:send({p, l, main_room}, {self(), ?WSBroadcast, list_to_binary(Coords)}).
+    Info = egeoip:lookup(Ip),
+    Coords = get_coords(Info),
+    gproc:send({p, l, main_room}, {self(), ?WSBroadcast, list_to_binary(Coords)}),
+    kill_slow_clients(main_room).
+%% utilite
+kill_slow_clients(Property) ->
+    ListPid = gproc:lookup_local_properties(Property),
+    lists:map(fun({Pid, _}) ->
+                      {message_queue_len, Count} = erlang:process_info(Pid, message_queue_len),
+                      if
+                          Count > 500 -> lager:warning("I killed a slow client, pid ~p", [Pid]),
+                                         exit(Pid, kill);
+                          true -> true
+                      end
+              end, ListPid).
 
 get_coords(Info) ->	
-	{ok, {_,_,_,_,_,_,_, Lat_float, Long_float,_,_}} = Info,
-	Latitude = round(Lat_float),
-	Longitude = round(Long_float),
-	lists:concat(["[",Latitude,",",Longitude,"]"]).
+    {ok, {_,_,_,_,_,_,_, Lat_float, Long_float,_,_}} = Info,
+    Latitude = round(Lat_float),
+    Longitude = round(Long_float),
+    lists:concat(["[",Latitude,",",Longitude,"]"]).
+
 
 

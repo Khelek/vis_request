@@ -1,5 +1,3 @@
-%% Feel free to use, reuse and abuse the code in this file.
-
 -module(vis_request).
 
 %% API.
@@ -27,8 +25,7 @@ stop() ->
 
 -spec push_ip(string()) -> {ok, pid()}.
 push_ip(Ip) ->
-    sv:run(ws_q, fun() ->
-       spawn(  fun() -> vis_request_app:vis_request_broadcast(Ip) end ) end).
+    sv:run(ws_q, fun() -> spawn(fun() -> vis_request_app:vis_request_broadcast(Ip) end) end).
 
 bench(Count) ->
     SampleIPs = ["63.224.214.117",
