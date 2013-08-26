@@ -77,7 +77,7 @@ test_params() ->
                 {token_limit, _Tokens},
                 {size, _Size},
                 {concurrency, _Conc},
-                {queue_type, _Type}]}]} = application:get_env(safetyvalve, queues),
+                {queue_type, _Type}]} | _Other]} = application:get_env(safetyvalve, queues),
     ResponsesCount = #websocket_params{}#websocket_params.responseCount,
     Timeout = (ResponsesCount / (Rate / (Hz / 1000))) * 1.1,
-    Params = #params{websocket_params = #websocket_params{timeout = Timeout}}.
+    _Params = #params{websocket_params = #websocket_params{timeout = Timeout}}.
